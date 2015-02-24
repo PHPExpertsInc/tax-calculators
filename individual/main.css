@@ -1,0 +1,36 @@
+h1, h2 { text-align: center; }
+div#content { width: 40em; margin-left: 80px; }
+table { border-collapse:collapse; }
+table#income_data_table { width: 23em; }
+table.report { border-bottom: 1px solid lightblue; }
+table.report td, table.report th { border-bottom: 1px solid lightblue; border-right: 1px solid lightblue; padding-right: 20px;  }
+table td, table.report td, table td input, table td select { text-align: right; width: 11em; }
+p { text-align: justify; }
+
+table th { padding-left: 10px; margin: -5px; text-align: left; background: #FEF1E9; }
+div#amzn_box {
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    margin-left: 290px;
+}
+
+div#mylink {
+	position: fixed;
+	top: 0;
+	right: 0;
+	background: #333399;
+	font-family: Consolas, sans-serif;
+	font-weight: bold;
+	font-size: 90%;
+	padding: 5px 8px 5px 8px;;
+}
+div#mylink a, div#mylink a:visited { text-decoration: none; color: white; }
+div#mylink:hover { background: #D31B17; }
+
+#logo h1 span#slogan {
+    display: block;
+    position: relative; top: -1.5em; left: 14em; font-size: 0.55em;
+}
+
+
