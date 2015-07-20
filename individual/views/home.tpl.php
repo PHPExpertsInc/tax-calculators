@@ -42,6 +42,14 @@ include '_header.tpl.php';
 			<form method="get" style="float: left">
 				<table id="income_data_table">
 					<tr>
+						<th><label for="country">Country: </label></th>
+						<td>
+							<select name="country" id="country">
+								<option<?php echo $country === 'US' ? ' selected="selected"' : ''; ?>>US</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
 						<th><label for="income">Gross income: </label></th>
 						<td><input type="text" name="income" value="<?php echo $e_income; ?>"/></td>
 					</tr>

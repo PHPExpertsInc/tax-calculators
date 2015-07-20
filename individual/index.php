@@ -6,6 +6,13 @@ new Thrive_Autoloader();
 // Set DEBUG mode on always.
 $_GET['debug'] = 1;
 
+if (isset($_GET['country']) && in_array(trim($_GET['country']), array('US'))) {
+	$country = trim($_GET['country']);
+}
+if (!isset($country)) {
+	$country = 'US';
+}
+
 // Front-ctrl
 if (!empty($_GET['income']))
 {
@@ -38,7 +45,7 @@ if (!empty($_GET['income']))
 	$taxReport = array();
 	foreach ($years as $year)
 	{
-		$taxCalc = USFederalPersonalIncomeTaxesFactory::build($taxMode, $year, new fMoney($income), new fMoney($deductions), $employmentType);
+		$taxCalc = call_user_func($country.'FederalPersonalIncomeTaxesFactory::build', $taxMode, $year, new fMoney($income), new fMoney($deductions), $employmentType);
 		$taxCalc->calculateTaxLiabilities();
 		$taxReport[$year] = $taxCalc->getTaxLiabilityReport();
 	}
