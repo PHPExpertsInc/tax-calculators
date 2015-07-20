@@ -6,7 +6,7 @@ new Thrive_Autoloader();
 // Set DEBUG mode on always.
 $_GET['debug'] = 1;
 
-if (isset($_GET['country']) && in_array(trim($_GET['country']), array('US'))) {
+if (isset($_GET['country']) && in_array(trim($_GET['country']), array('US', 'CA'))) {
 	$country = trim($_GET['country']);
 }
 if (!isset($country)) {

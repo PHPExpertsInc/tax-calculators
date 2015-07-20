@@ -46,6 +46,7 @@ include '_header.tpl.php';
 						<td>
 							<select name="country" id="country">
 								<option<?php echo $country === 'US' ? ' selected="selected"' : ''; ?>>US</option>
+								<option<?php echo $country === 'CA' ? ' selected="selected"' : ''; ?>>CA</option>
 							</select>
 						</td>
 					</tr>
@@ -62,7 +63,8 @@ include '_header.tpl.php';
 						<td>
 							<select name="mode">
 								<option value="<?php echo API_Types_TaxMode::SINGLE; ?>"<?php echo (!empty($taxMode) && $taxMode == API_Types_TaxMode::SINGLE) ? ' selected="selected"' : ''; ?>>Single</option>
-								<option value="<?php echo API_Types_TaxMode::JOINT; ?>"<?php echo (!empty($taxMode) && $taxMode == API_Types_TaxMode::JOINT) ? ' selected="selected"' : ''; ?>>Married: Joint</option>
+								<option value="<?php echo API_Types_TaxMode::JOINT; ?>"<?php echo (!empty($taxMode) && $taxMode == API_Types_TaxMode::JOINT) ? ' selected="selected"' : ''; ?>>Married: Joint (US Only)</option>
+								<option value="<?php echo API_Types_TaxMode::SPOUSE_AMOUNT; ?>"<?php echo (!empty($taxMode) && $taxMode == API_Types_TaxMode::SPOUSE_AMOUNT) ? ' selected="selected"' : ''; ?>>Spouse Amount (CA Only)</option>
 							</select>
 						</td>
 					</tr>
@@ -123,6 +125,7 @@ include '_header.tpl.php';
 						<td><?php echo $taxReport[$years[0]]->federalIncomeTax; ?></td>
 						<td><?php echo $taxReport[$years[1]]->federalIncomeTax; ?></td>
 					</tr>
+					<?php if ($country === 'US') { ?>
 					<tr>
 						<th>Social Security Tax:</th>
 						<td><?php echo $taxReport[$years[0]]->ssiTax; ?></td>
@@ -138,6 +141,18 @@ include '_header.tpl.php';
 						<td><?php echo $taxReport[$years[0]]->addMedicareTax; ?></td>
 						<td><?php echo $taxReport[$years[1]]->addMedicareTax; ?></td>
 					</tr>
+					<?php } elseif ($country === 'CA') { ?>
+					<tr>
+						<th>Canada Pension Plan:</th>
+						<td><?php echo $taxReport[$years[0]]->cppContribution; ?></td>
+						<td><?php echo $taxReport[$years[1]]->cppContribution; ?></td>
+					</tr>
+					<tr>
+						<th>Employment Insurance:</th>
+						<td><?php echo $taxReport[$years[0]]->employmentIns; ?></td>
+						<td><?php echo $taxReport[$years[1]]->employmentIns; ?></td>
+					</tr>
+					<?php } ?>
 					<tr>
 						<th>Total Tax Liability: </th>
 						<td><?php echo $taxReport[$years[0]]->totalTaxes; ?></td>
