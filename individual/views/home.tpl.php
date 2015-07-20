@@ -52,16 +52,16 @@ include '_header.tpl.php';
 					</tr>
 					<tr>
 						<th><label for="income">Gross income: </label></th>
-						<td><input type="text" name="income" value="<?php echo $e_income; ?>"/></td>
+						<td><input type="text" name="income" id="income" value="<?php echo $e_income; ?>"/></td>
 					</tr>
 					<tr>
 						<th><label for="deductions"><a rel="external" href="http://www.permamarks.net/grabbed_urls/OQhBYg/hr.cch.com_22/hr.cch.com/news/payroll/091712a.html">Deductions</a> ($0 = standard): </label></th>
-						<td><input type="text" name="deductions" value="<?php echo $e_deductions; ?>"/></td>
+						<td><input type="text" name="deductions" id="deductions" value="<?php echo $e_deductions; ?>"/></td>
 					</tr>
 					<tr>
 						<th><label for="mode">Mode:</label></th>
 						<td>
-							<select name="mode">
+							<select name="mode" id="mode">
 								<option value="<?php echo API_Types_TaxMode::SINGLE; ?>"<?php echo (!empty($taxMode) && $taxMode == API_Types_TaxMode::SINGLE) ? ' selected="selected"' : ''; ?>>Single</option>
 								<option value="<?php echo API_Types_TaxMode::JOINT; ?>"<?php echo (!empty($taxMode) && $taxMode == API_Types_TaxMode::JOINT) ? ' selected="selected"' : ''; ?>>Married: Joint (US Only)</option>
 								<option value="<?php echo API_Types_TaxMode::SPOUSE_AMOUNT; ?>"<?php echo (!empty($taxMode) && $taxMode == API_Types_TaxMode::SPOUSE_AMOUNT) ? ' selected="selected"' : ''; ?>>Spouse Amount (CA Only)</option>
@@ -71,7 +71,7 @@ include '_header.tpl.php';
 					<tr>
 						<th><label for="employment_type">Employment type: </label></th>
 						<td>
-							<select name="employment_type">
+							<select name="employment_type" id="employment_type">
 								<option value="<?php echo API_Types_Employment::EMPLOYEE; ?>"
 									<?php echo (!empty($employmentType) && $employmentType == API_Types_Employment::EMPLOYEE) ? ' selected="selected"' : ''; ?>>Employee</option>
 								<option value="<?php echo API_Types_Employment::SELF; ?>"
