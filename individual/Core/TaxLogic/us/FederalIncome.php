@@ -129,11 +129,11 @@ class US_FederalIncome_TaxLogic extends Scaffold_GenericTaxLogic implements API_
 			if (!empty($_GET['debug'])) {
 				echo "<div>Year: {$this->year}</div>\n";
 			}
-			$bracketsInfo = fetchUSFederalIndividualIncomeTaxBrackets($this->year);
+			$bracketsInfo = US_TaxBrackets::getIndividualBrackets($this->year);
 		}
 		else if ($this->taxMode == API_Types_TaxMode::JOINT)
 		{
-			$bracketsInfo = fetchUSFederalJointIncomeTaxBrackets($this->year);
+			$bracketsInfo = US_TaxBrackets::getJointBrackets($this->year);
 		}
 		else
 		{
