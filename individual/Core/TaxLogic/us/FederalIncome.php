@@ -1,6 +1,6 @@
 <?php
 
-class US_FederalIncome_TaxLogic extends Scaffold_GenericTaxLogic implements API_TaxLogic
+class US_FederalIncome_TaxLogic extends Scaffold_USTaxLogic implements API_TaxLogic
 {
 	/**
 	 * @return fMoney

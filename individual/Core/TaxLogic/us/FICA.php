@@ -1,6 +1,6 @@
 <?php
 
-abstract class FICA_TaxLogic extends Scaffold_GenericTaxLogic
+abstract class FICA_TaxLogic extends Scaffold_USTaxLogic
 {
 	protected $employmentType;
 

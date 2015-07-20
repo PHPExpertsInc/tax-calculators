@@ -1,6 +1,6 @@
 <?php
 
-class US_FederalIncomeTaxCalculator extends Scaffold_GenericTaxLogic
+class US_FederalIncomeTaxCalculator extends Scaffold_USTaxLogic
 {
 	/** @var API_TaxLogic[] */
 	protected $taxLogicArray;
