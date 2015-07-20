@@ -58,7 +58,7 @@ if (!empty($_GET['income']))
 	}
 	else { $percent = 0; }
 	if ($percent > 0) { $percent = "+$percent% more"; }
-	else { $percent = "-$percent% less"; }
+	else { $percent = -$percent."% less"; }
 	$diffStr = $diff->format();
 	$taxReport[$years[1]]->totalTaxes = $totalTaxes2->format() . "<br/><strong>($diffStr; $percent)</string>";
 }
