@@ -104,8 +104,8 @@ include '_header.tpl.php';
 				<table class="report">
 					<tr>
 						<td>&nbsp;</td>
-						<th style="text-align: right">2012</th>
-						<th style="text-align: right">2013</th>
+						<th style="text-align: right"><?php echo $years[0]; ?></th>
+						<th style="text-align: right"><?php echo $years[1]; ?></th>
 					</tr>
 					<tr>
 						<th>Mode: </th>
@@ -115,38 +115,38 @@ include '_header.tpl.php';
 					</tr>
 					<tr>
 						<th>Gross Income:</th>
-						<td><?php echo $taxReport[2012]->grossIncome->format(); ?></td>
-						<td><?php echo $taxReport[2013]->grossIncome->format(); ?></td>
+						<td><?php echo $taxReport[$years[0]]->grossIncome->format(); ?></td>
+						<td><?php echo $taxReport[$years[1]]->grossIncome->format(); ?></td>
 					</tr>
 					<tr>
 						<th>Federal Income Tax:</th>
-						<td><?php echo $taxReport[2012]->federalIncomeTax; ?></td>
-						<td><?php echo $taxReport[2013]->federalIncomeTax; ?></td>
+						<td><?php echo $taxReport[$years[0]]->federalIncomeTax; ?></td>
+						<td><?php echo $taxReport[$years[1]]->federalIncomeTax; ?></td>
 					</tr>
 					<tr>
 						<th>Social Security Tax:</th>
-						<td><?php echo $taxReport[2012]->ssiTax; ?></td>
-						<td><?php echo $taxReport[2013]->ssiTax; ?></td>
+						<td><?php echo $taxReport[$years[0]]->ssiTax; ?></td>
+						<td><?php echo $taxReport[$years[1]]->ssiTax; ?></td>
 					</tr>
 					<tr>
 						<th>Medicare Tax:</th>
-						<td><?php echo $taxReport[2012]->medicareTax; ?></td>
-						<td><?php echo $taxReport[2013]->medicareTax; ?></td>
+						<td><?php echo $taxReport[$years[0]]->medicareTax; ?></td>
+						<td><?php echo $taxReport[$years[1]]->medicareTax; ?></td>
 					</tr>
 					<tr>
 						<th><a rel="external" href="http://benefitslink.com/articles/guests/washbull110404a.html">Additional Medicare Tax</a>:</th>
-						<td><?php echo $taxReport[2012]->addMedicareTax; ?></td>
-						<td><?php echo $taxReport[2013]->addMedicareTax; ?></td>
+						<td><?php echo $taxReport[$years[0]]->addMedicareTax; ?></td>
+						<td><?php echo $taxReport[$years[1]]->addMedicareTax; ?></td>
 					</tr>
 					<tr>
 						<th>Total Tax Liability: </th>
-						<td><?php echo $taxReport[2012]->totalTaxes; ?></td>
-						<td><?php echo $taxReport[2013]->totalTaxes; ?></td>
+						<td><?php echo $taxReport[$years[0]]->totalTaxes; ?></td>
+						<td><?php echo $taxReport[$years[1]]->totalTaxes; ?></td>
 					</tr>
 					<tr>
 						<th>Net Income:</th>
-						<td><?php echo $taxReport[2012]->netIncome; ?></td>
-						<td><?php echo $taxReport[2013]->netIncome; ?></td>
+						<td><?php echo $taxReport[$years[0]]->netIncome; ?></td>
+						<td><?php echo $taxReport[$years[1]]->netIncome; ?></td>
 					</tr>
 				</table>
 			</div>

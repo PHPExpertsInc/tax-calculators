@@ -41,7 +41,7 @@ if (!empty($_GET['income']))
 
 	fMoney::setDefaultCurrency('USD');
 
-	$years = array(2012, 2013);
+	$years = $country === 'US' ? array(2012, 2013) : array(2014, 2015);
 	$taxReport = array();
 	foreach ($years as $year)
 	{
@@ -50,14 +50,17 @@ if (!empty($_GET['income']))
 		$taxReport[$year] = $taxCalc->getTaxLiabilityReport();
 	}
 
-	$totalTaxes2013 = $diff = new fMoney($taxReport[2013]->totalTaxes);
-	$totalTaxes2012 = new fMoney($taxReport[2012]->totalTaxes);
-	$diff = $diff->sub($totalTaxes2012);
-	$percent = round((($diff->__toString())/($totalTaxes2012->__toString())) * 100, 2);
+	$totalTaxes2 = $diff = new fMoney($taxReport[$years[1]]->totalTaxes);
+	$totalTaxes1 = new fMoney($taxReport[$years[0]]->totalTaxes);
+	$diff = $diff->sub($totalTaxes1);
+	if (!$totalTaxes1->eq(0)) {
+		$percent = round((($diff->__toString())/($totalTaxes1->__toString())) * 100, 2);
+	}
+	else { $percent = 0; }
 	if ($percent > 0) { $percent = "+$percent% more"; }
 	else { $percent = "-$percent% less"; }
 	$diffStr = $diff->format();
-	$taxReport[2013]->totalTaxes = $totalTaxes2013->format() . "<br/><strong>($diffStr; $percent)</string>";
+	$taxReport[$years[1]]->totalTaxes = $totalTaxes2->format() . "<br/><strong>($diffStr; $percent)</string>";
 }
 
 $e_income = (!empty($income)) ? htmlspecialchars($income) : '0';
