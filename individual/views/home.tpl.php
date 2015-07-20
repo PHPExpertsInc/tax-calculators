@@ -31,7 +31,7 @@ include '_header.tpl.php';
 			</div>
 <?php if (!empty($errorMessage)) { ?>
 			<p>It took me 3 hours and 40 minutes to create this calculator. You can 
-			<a href="http://www.youtube.com/watch?v=xJPf7XGDLqo&feature=plcp" onclick="window.location='http://www.wisdomproject.cc/url/1f'; return false;"><strong>watch it being made</strong></a>,
+			<a href="http://www.youtube.com/watch?v=xJPf7XGDLqo&amp;feature=plcp" onclick="window.location='http://www.wisdomproject.cc/url/1f'; return false;"><strong>watch it being made</strong></a>,
 			time lapsed to just over 7 minutes. It's pretty cool ;-)</p>
 			<div class="errorMessage">
 				<h3>ERROR:</h3>
