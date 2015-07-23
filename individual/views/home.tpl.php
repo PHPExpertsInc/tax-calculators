@@ -31,7 +31,7 @@ include '_header.tpl.php';
 			</div>
 <?php if (!empty($errorMessage)) { ?>
 			<p>It took me 3 hours and 40 minutes to create this calculator. You can 
-			<a href="http://www.youtube.com/watch?v=xJPf7XGDLqo&feature=plcp" onclick="window.location='http://www.wisdomproject.cc/url/1f'; return false;"><strong>watch it being made</strong></a>,
+			<a href="http://www.youtube.com/watch?v=xJPf7XGDLqo&amp;feature=plcp" onclick="window.location='http://www.wisdomproject.cc/url/1f'; return false;"><strong>watch it being made</strong></a>,
 			time lapsed to just over 7 minutes. It's pretty cool ;-)</p>
 			<div class="errorMessage">
 				<h3>ERROR:</h3>
@@ -42,26 +42,36 @@ include '_header.tpl.php';
 			<form method="get" style="float: left">
 				<table id="income_data_table">
 					<tr>
+						<th><label for="country">Country: </label></th>
+						<td>
+							<select name="country" id="country">
+								<option<?php echo $country === 'US' ? ' selected="selected"' : ''; ?>>US</option>
+								<option<?php echo $country === 'CA' ? ' selected="selected"' : ''; ?>>CA</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
 						<th><label for="income">Gross income: </label></th>
-						<td><input type="text" name="income" value="<?php echo $e_income; ?>"/></td>
+						<td><input type="text" name="income" id="income" value="<?php echo $e_income; ?>"/></td>
 					</tr>
 					<tr>
 						<th><label for="deductions"><a rel="external" href="http://www.permamarks.net/grabbed_urls/OQhBYg/hr.cch.com_22/hr.cch.com/news/payroll/091712a.html">Deductions</a> ($0 = standard): </label></th>
-						<td><input type="text" name="deductions" value="<?php echo $e_deductions; ?>"/></td>
+						<td><input type="text" name="deductions" id="deductions" value="<?php echo $e_deductions; ?>"/></td>
 					</tr>
 					<tr>
 						<th><label for="mode">Mode:</label></th>
 						<td>
-							<select name="mode">
+							<select name="mode" id="mode">
 								<option value="<?php echo API_Types_TaxMode::SINGLE; ?>"<?php echo (!empty($taxMode) && $taxMode == API_Types_TaxMode::SINGLE) ? ' selected="selected"' : ''; ?>>Single</option>
-								<option value="<?php echo API_Types_TaxMode::JOINT; ?>"<?php echo (!empty($taxMode) && $taxMode == API_Types_TaxMode::JOINT) ? ' selected="selected"' : ''; ?>>Married: Joint</option>
+								<option value="<?php echo API_Types_TaxMode::JOINT; ?>"<?php echo (!empty($taxMode) && $taxMode == API_Types_TaxMode::JOINT) ? ' selected="selected"' : ''; ?>>Married: Joint (US Only)</option>
+								<option value="<?php echo API_Types_TaxMode::SPOUSE_AMOUNT; ?>"<?php echo (!empty($taxMode) && $taxMode == API_Types_TaxMode::SPOUSE_AMOUNT) ? ' selected="selected"' : ''; ?>>Spouse Amount (CA Only)</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<th><label for="employment_type">Employment type: </label></th>
 						<td>
-							<select name="employment_type">
+							<select name="employment_type" id="employment_type">
 								<option value="<?php echo API_Types_Employment::EMPLOYEE; ?>"
 									<?php echo (!empty($employmentType) && $employmentType == API_Types_Employment::EMPLOYEE) ? ' selected="selected"' : ''; ?>>Employee</option>
 								<option value="<?php echo API_Types_Employment::SELF; ?>"
@@ -96,8 +106,8 @@ include '_header.tpl.php';
 				<table class="report">
 					<tr>
 						<td>&nbsp;</td>
-						<th style="text-align: right">2012</th>
-						<th style="text-align: right">2013</th>
+						<th style="text-align: right"><?php echo $years[0]; ?></th>
+						<th style="text-align: right"><?php echo $years[1]; ?></th>
 					</tr>
 					<tr>
 						<th>Mode: </th>
@@ -107,38 +117,51 @@ include '_header.tpl.php';
 					</tr>
 					<tr>
 						<th>Gross Income:</th>
-						<td><?php echo $taxReport[2012]->grossIncome->format(); ?></td>
-						<td><?php echo $taxReport[2013]->grossIncome->format(); ?></td>
+						<td><?php echo $taxReport[$years[0]]->grossIncome->format(); ?></td>
+						<td><?php echo $taxReport[$years[1]]->grossIncome->format(); ?></td>
 					</tr>
 					<tr>
 						<th>Federal Income Tax:</th>
-						<td><?php echo $taxReport[2012]->federalIncomeTax; ?></td>
-						<td><?php echo $taxReport[2013]->federalIncomeTax; ?></td>
+						<td><?php echo $taxReport[$years[0]]->federalIncomeTax; ?></td>
+						<td><?php echo $taxReport[$years[1]]->federalIncomeTax; ?></td>
 					</tr>
+					<?php if ($country === 'US') { ?>
 					<tr>
 						<th>Social Security Tax:</th>
-						<td><?php echo $taxReport[2012]->ssiTax; ?></td>
-						<td><?php echo $taxReport[2013]->ssiTax; ?></td>
+						<td><?php echo $taxReport[$years[0]]->ssiTax; ?></td>
+						<td><?php echo $taxReport[$years[1]]->ssiTax; ?></td>
 					</tr>
 					<tr>
 						<th>Medicare Tax:</th>
-						<td><?php echo $taxReport[2012]->medicareTax; ?></td>
-						<td><?php echo $taxReport[2013]->medicareTax; ?></td>
+						<td><?php echo $taxReport[$years[0]]->medicareTax; ?></td>
+						<td><?php echo $taxReport[$years[1]]->medicareTax; ?></td>
 					</tr>
 					<tr>
 						<th><a rel="external" href="http://benefitslink.com/articles/guests/washbull110404a.html">Additional Medicare Tax</a>:</th>
-						<td><?php echo $taxReport[2012]->addMedicareTax; ?></td>
-						<td><?php echo $taxReport[2013]->addMedicareTax; ?></td>
+						<td><?php echo $taxReport[$years[0]]->addMedicareTax; ?></td>
+						<td><?php echo $taxReport[$years[1]]->addMedicareTax; ?></td>
+					</tr>
+					<?php } elseif ($country === 'CA') { ?>
+					<tr>
+						<th>Canada Pension Plan:</th>
+						<td><?php echo $taxReport[$years[0]]->cppContribution; ?></td>
+						<td><?php echo $taxReport[$years[1]]->cppContribution; ?></td>
 					</tr>
 					<tr>
+						<th>Employment Insurance:</th>
+						<td><?php echo $taxReport[$years[0]]->employmentIns; ?></td>
+						<td><?php echo $taxReport[$years[1]]->employmentIns; ?></td>
+					</tr>
+					<?php } ?>
+					<tr>
 						<th>Total Tax Liability: </th>
-						<td><?php echo $taxReport[2012]->totalTaxes; ?></td>
-						<td><?php echo $taxReport[2013]->totalTaxes; ?></td>
+						<td><?php echo $taxReport[$years[0]]->totalTaxes; ?></td>
+						<td><?php echo $taxReport[$years[1]]->totalTaxes; ?></td>
 					</tr>
 					<tr>
 						<th>Net Income:</th>
-						<td><?php echo $taxReport[2012]->netIncome; ?></td>
-						<td><?php echo $taxReport[2013]->netIncome; ?></td>
+						<td><?php echo $taxReport[$years[0]]->netIncome; ?></td>
+						<td><?php echo $taxReport[$years[1]]->netIncome; ?></td>
 					</tr>
 				</table>
 			</div>

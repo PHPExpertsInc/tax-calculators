@@ -6,77 +6,11 @@ new Thrive_Autoloader();
 // Set DEBUG mode on always.
 $_GET['debug'] = 1;
 
-/**
- * @param $year
- * @return array|null
- * @throws InvalidArgumentException
- */
-function fetchUSFederalIndividualIncomeTaxBrackets($year)
-{
-	$brackets = null;
-	if ($year == 2012)
-	{
-		$brackets = array(
-			array('start' =>      0, 'stop' =>   8700, 'rate' => 0.10),
-			array('start' =>   8701, 'stop' =>  35350, 'rate' => 0.15),
-			array('start' =>  35351, 'stop' =>  85650, 'rate' => 0.25),
-			array('start' =>  85651, 'stop' => 178650, 'rate' => 0.28),
-			array('start' => 178651, 'stop' => 388350, 'rate' => 0.33),
-			array('start' => 388351, 'stop' =>   null, 'rate' => 0.35),
-		);
-	}
-	else if ($year == 2013)
-	{
-		$brackets = array(
-			array('start' =>      0, 'stop' =>   8950, 'rate' => 0.10),
-			array('start' =>   8951, 'stop' =>  36250, 'rate' => 0.15),
-			array('start' =>  36251, 'stop' =>  87850, 'rate' => 0.25),
-			array('start' =>  87851, 'stop' => 183250, 'rate' => 0.28),
-			array('start' => 183251, 'stop' => 398350, 'rate' => 0.33),
-			array('start' => 398351, 'stop' => 400000, 'rate' => 0.35),
-			array('start' => 400001, 'stop' =>   null, 'rate' => 0.396),
-		);
-	}
-	else
-	{
-		throw new InvalidArgumentException("The tax bracket information for the year $year is currently unavailable.");
-	}
-
-	return $brackets;
+if (isset($_GET['country']) && in_array(trim($_GET['country']), array('US', 'CA'))) {
+	$country = trim($_GET['country']);
 }
-
-function fetchUSFederalJointIncomeTaxBrackets($year)
-{
-	$brackets = null;
-	if ($year == 2012)
-	{
-		$brackets = array(
-			array('start' =>      0, 'stop' =>  17400, 'rate' => 0.10),
-			array('start' =>  17401, 'stop' =>  70700, 'rate' => 0.15),
-			array('start' =>  70701, 'stop' => 142700, 'rate' => 0.25),
-			array('start' => 142701, 'stop' => 217450, 'rate' => 0.28),
-			array('start' => 217451, 'stop' => 388350, 'rate' => 0.33),
-			array('start' => 388351, 'stop' =>   null, 'rate' => 0.35),
-		);
-	}
-	else if ($year == 2013)
-	{
-		$brackets = array(
-			array('start' =>      0, 'stop' =>  17900, 'rate' => 0.10),
-			array('start' =>  17901, 'stop' =>  72500, 'rate' => 0.15),
-			array('start' =>  72501, 'stop' => 146400, 'rate' => 0.25),
-			array('start' => 146401, 'stop' => 223050, 'rate' => 0.28),
-			array('start' => 223051, 'stop' => 398350, 'rate' => 0.33),
-			array('start' => 398351, 'stop' => 450000, 'rate' => 0.35),
-			array('start' => 450001, 'stop' =>   null, 'rate' => 0.396),
-		);
-	}
-	else
-	{
-		throw new InvalidArgumentException("The tax bracket information for the year $year is currently unavailable.");
-	}
-
-	return $brackets;
+if (!isset($country)) {
+	$country = 'US';
 }
 
 // Front-ctrl
@@ -107,23 +41,26 @@ if (!empty($_GET['income']))
 
 	fMoney::setDefaultCurrency('USD');
 
-	$years = array(2012, 2013);
+	$years = $country === 'US' ? array(2012, 2013) : array(2014, 2015);
 	$taxReport = array();
 	foreach ($years as $year)
 	{
-		$taxCalc = USFederalPersonalIncomeTaxesFactory::build($taxMode, $year, new fMoney($income), new fMoney($deductions), $employmentType);
+		$taxCalc = call_user_func($country.'FederalPersonalIncomeTaxesFactory::build', $taxMode, $year, new fMoney($income), new fMoney($deductions), $employmentType);
 		$taxCalc->calculateTaxLiabilities();
 		$taxReport[$year] = $taxCalc->getTaxLiabilityReport();
 	}
 
-	$totalTaxes2013 = $diff = new fMoney($taxReport[2013]->totalTaxes);
-	$totalTaxes2012 = new fMoney($taxReport[2012]->totalTaxes);
-	$diff = $diff->sub($totalTaxes2012);
-	$percent = round((($diff->__toString())/($totalTaxes2012->__toString())) * 100, 2);
+	$totalTaxes2 = $diff = new fMoney($taxReport[$years[1]]->totalTaxes);
+	$totalTaxes1 = new fMoney($taxReport[$years[0]]->totalTaxes);
+	$diff = $diff->sub($totalTaxes1);
+	if (!$totalTaxes1->eq(0)) {
+		$percent = round((($diff->__toString())/($totalTaxes1->__toString())) * 100, 2);
+	}
+	else { $percent = 0; }
 	if ($percent > 0) { $percent = "+$percent% more"; }
-	else { $percent = "-$percent% less"; }
+	else { $percent = -$percent."% less"; }
 	$diffStr = $diff->format();
-	$taxReport[2013]->totalTaxes = $totalTaxes2013->format() . "<br/><strong>($diffStr; $percent)</string>";
+	$taxReport[$years[1]]->totalTaxes = $totalTaxes2->format() . "<br/><strong>($diffStr; $percent)</string>";
 }
 
 $e_income = (!empty($income)) ? htmlspecialchars($income) : '0';

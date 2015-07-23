@@ -1,6 +1,6 @@
 <?php
 
-class US_FederalIncome_TaxLogic extends Scaffold_GenericTaxLogic implements API_TaxLogic
+class CA_FederalIncome_TaxLogic extends Scaffold_CATaxLogic implements API_TaxLogic
 {
 	/**
 	 * @return fMoney
@@ -61,18 +61,17 @@ class US_FederalIncome_TaxLogic extends Scaffold_GenericTaxLogic implements API_
 	 */
 	protected function determineDeductionAmount()
 	{
-		// The IRS says to use the GREATER of individual deductions or the Standard deduction.
-		$standardDeduction = $this->fetchStandardDeductionAmount();
+		$deduction = $this->fetchDeductionAmount();
 		if (!empty($_GET['debug'])) {
-			echo "<div>[income] Standard deduction: $standardDeduction</div>\n";
+			echo "<div>[income] Basic deduction + any Spouse Amount: $deduction</div>\n";
 		}
-		if ($this->deductions->gte($standardDeduction))
+		if ($this->deductions->gte($deduction))
 		{
 			return $this->deductions;
 		}
 		else
 		{
-			return new fMoney($standardDeduction);
+			return new fMoney($deduction);
 		}
 	}
 
@@ -80,32 +79,32 @@ class US_FederalIncome_TaxLogic extends Scaffold_GenericTaxLogic implements API_
 	 * @return int
 	 * @throws LogicException
 	 */
-	protected function fetchStandardDeductionAmount()
+	protected function fetchDeductionAmount()
 	{
-		if ($this->year == 2012)
+		if ($this->year === 2014)
 		{
 			if ($this->taxMode == API_Types_TaxMode::SINGLE)
 			{
-				return 5950;
+				return 11138;
 			}
-			else if ($this->taxMode == API_Types_TaxMode::JOINT)
+			else if ($this->taxMode == API_Types_TaxMode::SPOUSE_AMOUNT)
 			{
-				return 11900;
+				return 11138 + 11138;
 			}
 			else
 			{
 				throw new LogicException("Standard deducation data for the year '{$this->year}' and mode '{$this->taxMode}' is not currently available.");
 			}
 		}
-		else if ($this->year == 2013)
+		else if ($this->year == 2015)
 		{
 			if ($this->taxMode == API_Types_TaxMode::SINGLE)
 			{
-				return 6100;
+				return 11327;
 			}
-			else if ($this->taxMode == API_Types_TaxMode::JOINT)
+			else if ($this->taxMode == API_Types_TaxMode::SPOUSE_AMOUNT)
 			{
-				return 12200;
+				return 11327 + 11327;
 			}
 			else
 			{
@@ -123,22 +122,8 @@ class US_FederalIncome_TaxLogic extends Scaffold_GenericTaxLogic implements API_
 	 */
 	protected function fetchTaxBracketInfo()
 	{
-		// Simulate loading from a data store. Use a data provider function for now.
-		if ($this->taxMode == API_Types_TaxMode::SINGLE)
-		{
-			if (!empty($_GET['debug'])) {
-				echo "<div>Year: {$this->year}</div>\n";
-			}
-			$bracketsInfo = fetchUSFederalIndividualIncomeTaxBrackets($this->year);
-		}
-		else if ($this->taxMode == API_Types_TaxMode::JOINT)
-		{
-			$bracketsInfo = fetchUSFederalJointIncomeTaxBrackets($this->year);
-		}
-		else
-		{
-			throw new LogicException("Federal Income: No bracket info for tax mode '{$this->taxMode}'");
-		}
+    // Simulate loading from a data store. Use a data provider function for now.
+		$bracketsInfo = CA_TaxBrackets::getBrackets($this->year);
 
 		// If we were using PDO, i'd just call $stmt->fetchObject('FederalIncomeTaxBracket');
 		$brackets = array();
@@ -154,4 +139,3 @@ class US_FederalIncome_TaxLogic extends Scaffold_GenericTaxLogic implements API_
 		return $brackets;
 	}
 }
-

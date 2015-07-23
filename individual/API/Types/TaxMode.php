@@ -7,5 +7,8 @@ abstract class API_Types_TaxMode
 	const SEPARATE  = 'Married: Separate';
 	const HOUSEHEAD = 'Head of Household';
 	const WIDOWER   = 'Qualified Widower';
+
+	// Canada
+	const SPOUSE_AMOUNT = 'Spouse Amount';
 }
 

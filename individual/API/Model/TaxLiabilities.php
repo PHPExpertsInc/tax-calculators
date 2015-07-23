@@ -9,4 +9,7 @@ class API_Model_TaxLiabilities
 	public $addMedicareTax;
 	public $totalTaxes;
 	public $netIncome;
+
+	public $cppContribution;
+	public $employmentIns;
 }

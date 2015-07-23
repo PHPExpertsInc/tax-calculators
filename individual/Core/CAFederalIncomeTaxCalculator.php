@@ -1,6 +1,6 @@
 <?php
 
-class US_FederalIncomeTaxCalculator extends Scaffold_USTaxLogic
+class CA_FederalIncomeTaxCalculator extends Scaffold_CATaxLogic
 {
 	/** @var API_TaxLogic[] */
 	protected $taxLogicArray;
@@ -54,14 +54,8 @@ class US_FederalIncomeTaxCalculator extends Scaffold_USTaxLogic
 		$taxLiabilities = new API_Model_TaxLiabilities;
 		$taxLiabilities->grossIncome = $this->grossIncome;
 		$taxLiabilities->federalIncomeTax = $this->taxLiabilities['income']->format();
-		$taxLiabilities->ssiTax = $this->taxLiabilities['ssi']->format();
-		$taxLiabilities->medicareTax = $this->taxLiabilities['medicare']->format();
-
-		// Don't forget Obama's *stupid* Additional Medicare Tax ;-/
-		if ($this->year >= 2013 && $this->grossIncome->gte(100000))
-		{
-			$taxLiabilities->addMedicareTax = $this->taxLiabilities['addMedicare']->format();
-		}
+		$taxLiabilities->cppContribution = $this->taxLiabilities['cpp']->format();
+		$taxLiabilities->employmentIns = $this->taxLiabilities['ei']->format();
 
 		$taxLiabilities->totalTaxes = $this->totalTaxes->format();
 		$taxLiabilities->netIncome = $this->grossIncome->sub($this->totalTaxes)->format();
@@ -69,4 +63,3 @@ class US_FederalIncomeTaxCalculator extends Scaffold_USTaxLogic
 		return $taxLiabilities;
 	}
 }
-
